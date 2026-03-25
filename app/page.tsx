@@ -110,21 +110,16 @@ export default function Home() {
                 src="/matches-schedule.png" 
                 alt="Cricket Matches Schedule" 
                 className="w-full h-auto rounded-xl sm:rounded-2xl shadow-2xl border border-orange-600/20 hover:border-orange-600/50 transition"
-                onError={(e) => {
-                  e.target.style.display = 'none';
-                  const parent = e.target.parentElement;
-                  parent.innerHTML = `
-                    <div class="bg-slate-800/50 backdrop-blur-sm rounded-xl border border-orange-600/30 p-12 text-center">
-                      <p class="text-orange-500 text-xl sm:text-2xl font-bold mb-4">📸 Matches Schedule Image</p>
-                      <p class="text-gray-400 mb-8 text-sm sm:text-base">To add your cricket matches schedule image:</p>
-                      <div class="bg-slate-700/50 rounded-lg p-8 text-left inline-block">
-                        <p class="text-gray-300 text-sm mb-4"><span class="text-orange-500 font-bold">1.</span> Download the image you want</p>
-                        <p class="text-gray-300 text-sm mb-4"><span class="text-orange-500 font-bold">2.</span> Save it as: <span class="font-mono text-orange-400 bg-black/50 px-2 py-1 rounded">matches-schedule.png</span></p>
-                        <p class="text-gray-300 text-sm mb-4"><span class="text-orange-500 font-bold">3.</span> Place it in: <span class="font-mono text-orange-400 bg-black/50 px-2 py-1 rounded">LiveCrick/public/</span></p>
-                        <p class="text-gray-300 text-sm"><span class="text-orange-500 font-bold">4.</span> Refresh your browser</p>
-                      </div>
-                    </div>
-                  `;
+                onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+                  const img = e.currentTarget;
+                  img.style.display = 'none';
+
+                  const parent = img.parentElement;
+                  if (parent) {
+                    parent.innerHTML = `<div class="bg-slate-800/50 backdrop-blur-sm rounded-xl border border-orange-600/30 p-12 text-center">
+                      Image not available
+                    </div>`;
+                  }
                 }}
               />
             </div>

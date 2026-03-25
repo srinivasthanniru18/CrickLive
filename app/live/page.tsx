@@ -61,10 +61,23 @@ export default function Live() {
 
           {/* Matches Schedule Image - Centered */}
           <div className="w-full mb-10 sm:mb-14 md:mb-16 flex justify-center py-8 sm:py-12">
-            <div className="w-full max-w-5xl flex items-center justify-center">
-              <div className="hidden w-full text-center p-8">
-                <p className="text-gray-400 text-sm">Matches schedule image will appear here</p>
-              </div>
+            <div className="w-full max-w-5xl">
+              <img 
+                src="/matches-schedule.png" 
+                alt="Cricket Matches Schedule" 
+                className="w-full h-auto rounded-xl sm:rounded-2xl shadow-2xl border border-orange-600/20 hover:border-orange-600/50 transition"
+                onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+                  const img = e.currentTarget;
+                  img.style.display = 'none';
+
+                  const parent = img.parentElement;
+                  if (parent) {
+                    parent.innerHTML = `<div class="bg-slate-800/50 backdrop-blur-sm rounded-xl border border-orange-600/30 p-12 text-center">
+                      Image not available
+                    </div>`;
+                  }
+                }}
+              />
             </div>
           </div>
 
