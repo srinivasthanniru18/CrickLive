@@ -1,17 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 export default function Live() {
   const [quality, setQuality] = useState('1080p');
-  const [videoSrc, setVideoSrc] = useState('');
-
-  useEffect(() => {
-    const encodedLink = "aHR0cHM6Ly9wbGF5ZXIudmRvY2lwaGVyLmNvbS9saXZlLXYyP2xpdmVJZD1mMmIwNzg4YzVmMDQ0ZTYwOTA2M2IxZjc4OGE3NWE3Yg==";
-    const decodedLink = atob(encodedLink);
-    setVideoSrc(decodedLink);
-  }, []);
 
   return (
     <>
@@ -40,44 +33,28 @@ export default function Live() {
 
           {/* Video Player Container - Mobile Optimized */}
           <div className="relative w-full bg-gray-900 rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl mb-6 sm:mb-8 border border-orange-600/30">
-            {/* VDocipher Live Stream Player */}
+            {/* VDO Cipher Live Stream Player */}
             <div className="w-full bg-black flex items-center justify-center" style={{ aspectRatio: '16 / 9' }}>
-              {videoSrc && (
-                <iframe
-                  id="videoFrame"
-                  src={videoSrc}
-                  style={{
-                    border: 'none',
-                    width: '100%',
-                    height: '100%',
-                    aspectRatio: '16/9'
-                  }}
-                  allow="autoplay,fullscreen"
-                  allowFullScreen
-                ></iframe>
-              )}
+              <iframe
+                src="https://player.vdocipher.com/live-v2?liveId=7dd108cbd9ef4cbc9e79794bf0f7b69a"
+                style={{
+                  border: '0',
+                  width: '100%',
+                  aspectRatio: '16/9',
+                  maxWidth: '100%',
+                }}
+                allow="autoplay,fullscreen"
+                allowFullScreen
+              ></iframe>
             </div>
           </div>
 
           {/* Matches Schedule Image - Centered */}
           <div className="w-full mb-10 sm:mb-14 md:mb-16 flex justify-center py-8 sm:py-12">
-            <div className="w-full max-w-5xl">
-              <img 
-                src="/matches-schedule.png" 
-                alt="Cricket Matches Schedule" 
-                className="w-full h-auto rounded-xl sm:rounded-2xl shadow-2xl border border-orange-600/20 hover:border-orange-600/50 transition"
-                onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
-                  const img = e.currentTarget;
-                  img.style.display = 'none';
-
-                  const parent = img.parentElement;
-                  if (parent) {
-                    parent.innerHTML = `<div class="bg-slate-800/50 backdrop-blur-sm rounded-xl border border-orange-600/30 p-12 text-center">
-                      Image not available
-                    </div>`;
-                  }
-                }}
-              />
+            <div className="w-full max-w-5xl flex items-center justify-center">
+              <div className="hidden w-full text-center p-8">
+                <p className="text-gray-400 text-sm">Matches schedule image will appear here</p>
+              </div>
             </div>
           </div>
 

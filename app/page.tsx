@@ -5,8 +5,11 @@ import { useState, useEffect } from 'react';
 
 export default function Home() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+    
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };
@@ -19,7 +22,7 @@ export default function Home() {
       {/* Navigation - Optimized for Mobile */}
       <nav 
         className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-          isScrolled 
+          mounted && isScrolled
             ? 'bg-black/95 backdrop-blur-md border-b border-orange-600/50 shadow-lg' 
             : 'bg-gradient-to-b from-black via-black/80 to-transparent'
         }`}
