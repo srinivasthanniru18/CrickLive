@@ -9,16 +9,18 @@ export default function Live() {
   return (
     <>
       {/* Navigation - Responsive */}
-      <nav className="fixed top-0 w-full bg-black/95 backdrop-blur-md border-b border-orange-600/50 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center">
+      <nav className="fixed top-0 w-full bg-gradient-to-b from-black via-black/95 to-black/80 backdrop-blur-xl border-b border-orange-600/50 z-50 shadow-2xl">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-5 flex justify-between items-center">
           <Link href="/">
-            <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-orange-500 to-red-600 bg-clip-text text-transparent cursor-pointer hover:opacity-80 transition">
-              CRICKLIVE
+            <h1 className="text-3xl sm:text-4xl font-black tracking-wider">
+              <span className="bg-gradient-to-r from-orange-300 via-orange-500 to-red-600 bg-clip-text text-transparent drop-shadow-2xl" style={{textShadow: '0 0 30px rgba(255,87,34,0.8)'}}>
+                CRICKLIVE
+              </span>
             </h1>
           </Link>
           <Link href="/">
-            <button className="text-orange-500 hover:text-orange-400 transition text-sm sm:text-base font-semibold flex items-center gap-1">
-              ← Back
+            <button className="bg-gradient-to-r from-orange-600 via-red-600 to-orange-700 text-white px-6 py-3 rounded-xl hover:from-orange-500 hover:via-red-500 hover:to-orange-600 transition text-sm sm:text-base font-bold flex items-center gap-2 shadow-xl hover:shadow-2xl hover:scale-105 transform">
+              ← Back Home
             </button>
           </Link>
         </div>
@@ -53,7 +55,7 @@ export default function Live() {
           <div className="w-full mb-10 sm:mb-14 md:mb-16 flex justify-center py-8 sm:py-12">
             <div className="w-full max-w-5xl flex items-center justify-center">
               <div className="hidden w-full text-center p-8">
-                <p className="text-gray-400 text-sm">Matches schedule image will appear here</p>
+                <p className="text-gray-400 text-sm"></p>
               </div>
             </div>
           </div>
