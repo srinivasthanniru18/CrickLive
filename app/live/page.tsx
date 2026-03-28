@@ -38,10 +38,10 @@ export default function Live() {
             {/* VDO Cipher Live Stream Player */}
             <div className="w-full bg-black flex items-center justify-center" style={{ aspectRatio: '16 / 9' }}>
               <iframe
-                src="https://player.vdocipher.com/live-v2?liveId=a22894311c644a198f9a7620c59a881d"
+                src="https://player.vdocipher.com/live-v2?liveId=050b614b269149e6a489051b40c0db29"
                 style={{
                   border: '0',
-                  width: '100%',
+                  width: '720px',
                   aspectRatio: '16/9',
                   maxWidth: '100%',
                 }}
