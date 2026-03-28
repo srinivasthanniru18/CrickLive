@@ -35,19 +35,14 @@ export default function Live() {
 
           {/* Video Player Container - Mobile Optimized */}
           <div className="relative w-full bg-gray-900 rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl mb-6 sm:mb-8 border border-orange-600/30">
-            {/* VDO Cipher Live Stream Player */}
+            {/* Live Stream Ended Message */}
             <div className="w-full bg-black flex items-center justify-center" style={{ aspectRatio: '16 / 9' }}>
-              <iframe
-                src="https://player.vdocipher.com/live-v2?liveId=050b614b269149e6a489051b40c0db29"
-                style={{
-                  border: '0',
-                  width: '720px',
-                  aspectRatio: '16/9',
-                  maxWidth: '100%',
-                }}
-                allow="autoplay,fullscreen"
-                allowFullScreen
-              ></iframe>
+              <div className="text-center">
+                <div className="text-6xl mb-4">⚠️</div>
+                <h2 className="text-3xl font-bold text-white mb-2">Live Stream Ended</h2>
+                <p className="text-xl text-gray-300">Due to technical issues, the live stream has been ended.</p>
+                <p className="text-sm text-gray-400 mt-4">Please check back later for the next broadcast.</p>
+              </div>
             </div>
           </div>
 
