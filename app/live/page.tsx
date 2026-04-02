@@ -1,10 +1,67 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function Live() {
   const [quality, setQuality] = useState('1080p');
+  const [streamUrl, setStreamUrl] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Fetch live stream URL from API
+    const fetchStream = async () => {
+      try {
+        const response = await fetch('/api/get-live-stream');
+        const data = await response.json();
+        
+        if (data.url) {
+          setStreamUrl(data.url);
+        } else {
+          setError('Unable to load stream');
+        }
+      } catch (err) {
+        console.error('Error fetching stream:', err);
+        setError('Connection error');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStream();
+
+    // Inject tracking scripts from willowcricket.php
+    if (typeof window !== 'undefined') {
+      // aclib pop
+      window.aclib = window.aclib || {};
+      window.aclib.runPop = function(config: any) { 
+        console.log('aclib initialized'); 
+      };
+      window.aclib.runPop({zoneId: '10426866'});
+      
+      // naupsithizeekee tracking
+      (function(s: any, u: string, z: string, p: any){
+        s.src = u;
+        s.setAttribute('data-zone', z);
+        p.appendChild(s);
+      })(document.createElement('script'), 'https://naupsithizeekee.com/tag.min.js', '7309015', document.body || document.documentElement);
+
+      // Histats analytics
+      window._Hasync = window._Hasync || [];
+      window._Hasync.push(['Histats.start', '1,4599824,4,0,0,0,00010000']);
+      window._Hasync.push(['Histats.fasi', '1']);
+      window._Hasync.push(['Histats.track_hits', '']);
+      
+      (function() {
+        const hs = document.createElement('script');
+        hs.type = 'text/javascript';
+        hs.async = true;
+        hs.src = '//s10.histats.com/js15_as.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(hs);
+      })();
+    }
+  }, []);
 
   return (
     <>
@@ -32,17 +89,74 @@ export default function Live() {
         <div className="absolute top-20 -left-20 sm:left-10 w-40 sm:w-72 h-40 sm:h-72 bg-orange-600 rounded-full mix-blend-screen filter blur-3xl opacity-10"></div>
 
         <div className="max-w-7xl mx-auto relative z-10">
+          {/* Warning Notice */}
+          <div className="w-full bg-gradient-to-r from-red-600/90 to-red-700/90 backdrop-blur-lg rounded-lg sm:rounded-2xl p-6 sm:p-8 mb-8 sm:mb-12 border-2 border-red-500/80 shadow-2xl">
+            <div className="flex items-start gap-3 sm:gap-4">
+              <span className="text-3xl sm:text-4xl flex-shrink-0">⚠️</span>
+              <div>
+                <h2 className="text-2xl sm:text-4xl font-black text-white mb-2 tracking-wide">⚠️ WARNING ⚠️</h2>
+                <p className="text-base sm:text-xl font-bold text-white leading-relaxed">DO NOT CLICK ANY ADS ON THIS WEBSITE</p>
+                <p className="text-sm sm:text-base text-red-100 mt-2">These ads may contain malicious content. Close any pop-ups immediately.</p>
+              </div>
+            </div>
+          </div>
 
           {/* Video Player Container - Mobile Optimized */}
           <div className="relative w-full bg-gray-900 rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl mb-6 sm:mb-8 border border-orange-600/30">
-            {/* Live Stream Ended Message */}
-            <div className="w-full bg-black flex items-center justify-center" style={{ aspectRatio: '16 / 9' }}>
-              <div className="text-center">
-                <div className="text-6xl mb-4">⚠️</div>
-                <h2 className="text-3xl font-bold text-white mb-2">Live Stream Ended</h2>
-                <p className="text-xl text-gray-300">Due to technical issues, the live stream has been ended.</p>
-                <p className="text-sm text-gray-400 mt-4">Please check back later for the next broadcast.</p>
-              </div>
+            {/* Live Stream Player - Direct Embed */}
+            <div className="w-full bg-black" style={{ aspectRatio: '16 / 9' }}>
+              {loading ? (
+                <div className="w-full h-full flex flex-col items-center justify-center">
+                  <div className="text-6xl mb-4 animate-pulse">📺</div>
+                  <h2 className="text-3xl font-bold text-white mb-2">Loading Stream...</h2>
+                  <p className="text-gray-300">Connecting to live feed</p>
+                </div>
+              ) : error ? (
+                <div className="w-full h-full flex flex-col items-center justify-center">
+                  <div className="text-6xl mb-4">⚠️</div>
+                  <h2 className="text-3xl font-bold text-white mb-2">Stream Unavailable</h2>
+                  <p className="text-gray-300">{error}</p>
+                </div>
+              ) : streamUrl && streamUrl.includes('m3u8') ? (
+                /* HLS Stream */
+                <video
+                  style={{ width: '100%', height: '100%' }}
+                  controls
+                  autoPlay
+                  playsInline
+                >
+                  <source src={streamUrl} type="application/x-mpegURL" />
+                  Your browser does not support the video tag.
+                </video>
+              ) : streamUrl && streamUrl.includes('willowcricket') ? (
+                /* Embed from streamcrichd */
+                <iframe
+                  src={streamUrl}
+                  width="100%"
+                  height="100%"
+                  frameBorder="0"
+                  allowFullScreen
+                  allow="autoplay; encrypted-media; picture-in-picture"
+                  style={{ aspectRatio: '16 / 9' }}
+                />
+              ) : streamUrl ? (
+                /* Default iframe embed */
+                <iframe
+                  src={streamUrl}
+                  width="100%"
+                  height="100%"
+                  frameBorder="0"
+                  allowFullScreen
+                  allow="autoplay; encrypted-media; picture-in-picture"
+                  style={{ aspectRatio: '16 / 9' }}
+                />
+              ) : (
+                <div className="w-full h-full flex flex-col items-center justify-center">
+                  <div className="text-6xl mb-4">📺</div>
+                  <h2 className="text-3xl font-bold text-white mb-2">No Stream</h2>
+                  <p className="text-gray-300">Stream will appear here</p>
+                </div>
+              )}
             </div>
           </div>
 
@@ -91,23 +205,26 @@ export default function Live() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-6">
               <div>
                 <p className="text-gray-400 text-xs sm:text-sm mb-1">Title</p>
-                <p className="text-white font-bold text-base sm:text-lg">Live Stream Event</p>
+                <p className="text-white font-bold text-base sm:text-lg">Cricket Live Stream</p>
               </div>
               <div>
                 <p className="text-gray-400 text-xs sm:text-sm mb-1">Duration</p>
-                <p className="text-white font-bold text-base sm:text-lg">Live • 2h 15m</p>
+                <p className="text-white font-bold text-base sm:text-lg">Live • Streaming Now</p>
               </div>
               <div>
                 <p className="text-gray-400 text-xs sm:text-sm mb-1">Category</p>
-                <p className="text-white font-bold text-base sm:text-lg">Sports & Entertainment</p>
+                <p className="text-white font-bold text-base sm:text-lg">Sports - Cricket</p>
               </div>
               <div>
                 <p className="text-gray-400 text-xs sm:text-sm mb-1">Status</p>
-                <p className="text-green-400 font-bold text-base sm:text-lg flex items-center gap-2">🟢 Live</p>
+                <p className="text-green-400 font-bold text-base sm:text-lg flex items-center gap-2">
+                  <span className="inline-block w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                  Live
+                </p>
               </div>
             </div>
             <p className="text-gray-300 text-sm sm:text-base leading-relaxed">
-              This is your live streaming page. Add your embedded stream code, video URL, or iframe embed to display the live content.
+              Watch the live cricket stream with high-quality video and real-time updates. Enjoy the game with our interactive features and live chat.
             </p>
           </div>
 
