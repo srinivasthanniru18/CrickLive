@@ -3,6 +3,14 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 
+// Extend Window interface for tracking scripts
+declare global {
+  interface Window {
+    aclib?: any;
+    _Hasync?: any[];
+  }
+}
+
 export default function Live() {
   const [quality, setQuality] = useState('1080p');
   const [streamUrl, setStreamUrl] = useState<string | null>(null);
